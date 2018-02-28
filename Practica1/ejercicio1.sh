@@ -5,17 +5,7 @@ if [ $# -ne 1 ]; then
 fi
 if [ -d $1 ]; then
   	cd $1
-        i=0
-        j=0
-	for x in $(find -name "*.c"  )
-		do
-		let i=i+1
-		done
-	for x in $(find -name "*.h"  )
-		do
-		let j=j+1
-		done
-        echo "Hay $i ficheros .c y $j ficheros .h"
+        echo "Hay $(find -name "*.c"|wc -l  ) ficheros .c y $(find -name "*.h"|wc -l  ) ficheros .h"
 	for x in $(find -name "*.c"  ) 
 		do
 		echo -e "El fichero $x tiene $(wc -l < $x) lineas y $(wc -m < $x) caracteres" 
