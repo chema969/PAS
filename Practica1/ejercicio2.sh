@@ -18,6 +18,6 @@ if [ -d $1 ]; then
 			r=0
 		fi
  		echo "$(basename $x); $(stat -c %U $x | wc -m);$(stat -c %y $x);$(stat -c %X $x);$(stat -c %s $x);$(stat -c %b $x);$(stat -c %A $x);$r "
-		done 
+		done | sort -t ";" -nk 5
 	
 fi

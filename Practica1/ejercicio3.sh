@@ -27,16 +27,14 @@ if [ -d $1 ]; then
 		mkdir "mediano"
 		mkdir "grande"
 		mkdir "pequeño"
-	for x in $(find -name "*")
+	for x in $(find -type f)
 		do
-		if [ -f $x ];then
-			if [ $(wc -c <$x) -gt $b ]; then 
-				mv $x "./grande"
-			elif [ $(wc -c <$x) -lt $a ]; then
-				mv $x "./pequeño"
-			else 
-				mv $x "./mediano"
-			fi
+		if [ $(wc -c <$x) -gt $b ]; then 
+			mv $x "./grande"
+		elif [ $(wc -c <$x) -lt $a ]; then
+			mv $x "./pequeño"
+		else 
+			mv $x "./mediano"
 		fi
 		done	
 fi
