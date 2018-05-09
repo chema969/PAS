@@ -5,11 +5,13 @@
 #include <errno.h>
 #include <getopt.h>
 #include <pwd.h>
+#include <grp.h>
 #include <sys/types.h>
 
 void help();
 void usuarioNombre(char* nombre);
 void usuarioId(char* nombre);
+void allgroups();
 
 int main(int argc,char ** argv){
    int c;
@@ -47,9 +49,29 @@ int main(int argc,char ** argv){
            ivalue=optarg;
            usuarioId(ivalue);
           break;
+        case 's':
+          allgroups();
+         break;
       }
 }
 }
+
+
+
+
+
+void allgroups(){
+      struct group *gr;
+      while(gr=getgrent())
+      	printf("ID:%d Nombre del grupo: %s\n",gr->gr_gid, gr->gr_name);    
+}
+
+
+
+
+
+
+
 
 void usuarioNombre(char* nombre){
     struct passwd *pw;
