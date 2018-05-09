@@ -4,10 +4,12 @@
 #include <ctype.h>
 #include <errno.h>
 #include <getopt.h>
+#include <pwd.h>
+#include <sys/types.h>
 
 void help();
-
-
+void usuarioNombre(char* nombre);
+void usuarioId(char* nombre);
 
 int main(int argc,char ** argv){
    int c;
@@ -36,11 +38,41 @@ int main(int argc,char ** argv){
       switch(c){
         case 'h':
           help();
+         break;
+        case 'u':
+           uvalue=optarg;
+           usuarioNombre(uvalue);
+         break;
+        case 'i':
+           ivalue=optarg;
+           usuarioId(ivalue);
           break;
       }
 }
 }
 
+void usuarioNombre(char* nombre){
+    struct passwd *pw;
+    if ((pw = getpwnam(nombre)) == NULL)
+        {
+            fprintf(stderr, "Get of user information failed.\n");
+            exit(1);
+        }
+        printf("Nombre: %s\n", pw->pw_gecos);
+	
+}
+
+
+void usuarioId(char* nombre){
+     struct passwd *pw;
+     if ((pw = getpwnam(nombre)) == NULL)
+        {
+            fprintf(stderr, "Get of user information failed.\n");
+            exit(1);
+        }
+     printf("UID:%d\n ", pw->pw_uid);
+}
+  
 void help(){
     printf("\033[1m-u/--username\033[22m user Muestra la informacion del user\n");  
     printf("-i/--useruid id");   
