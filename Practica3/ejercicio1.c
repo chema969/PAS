@@ -10,8 +10,10 @@
 
 void help();
 void usuarioNombre(char* nombre);
-void usuarioId(char* nombre);
+void usuarioId(int id);
 void allgroups();
+void todo(char *nombre);
+void grupoUsuarioAct();
 
 int main(int argc,char ** argv){
    int c;
@@ -47,16 +49,48 @@ int main(int argc,char ** argv){
          break;
         case 'i':
            ivalue=optarg;
-           usuarioId(ivalue);
+           usuarioId(atoi(ivalue));
           break;
+        case 'a':
+           avalue=optarg;
+           todo(avalue);
+           break;
         case 's':
           allgroups();
          break;
+        case 'b':
+          grupoUsuarioAct();
+         break;
+        case '?':
+				/* getopt_long ya imprime su mensaje de error, no es necesario hacer nada */
+				/* Si queremos imprimir nuestros propios errores, debemos poner opterr=0,
+				 y hacer algo como lo que se expone a continuacion. Pruebe a hacer sus propios errores.
+				if (optopt == 'c')
+					fprintf (stderr, "La opción %c requiere un argumento.\n", optopt);*/
+				break;
+       default:
+				abort ();
       }
+if (optind < argc)
+	{
+		printf("Argumentos ARGV que no son opciones: ");
+		while (optind < argc)
+			printf("%s ", argv[optind++]);
+		putchar ('\n');
+	}
 }
 }
 
 
+
+void grupoUsuarioAct(){
+  struct group *gr;
+  if((gr = getgrgid (getegid()))==NULL){
+        fprintf(stderr, "Get of group information failed.\n");
+            exit(1);
+        }
+      	printf("ID:%d Nombre del grupo: %s\n",gr->gr_gid, gr->gr_name);   
+}
 
 
 
@@ -69,9 +103,26 @@ void allgroups(){
 
 
 
-
-
-
+void todo(char *nombre){
+struct passwd *pw;
+struct group *gr;
+    if ((pw = getpwnam(nombre)) == NULL)
+        {
+            fprintf(stderr, "Get of user information failed.\n");
+            exit(1);
+        }
+        printf("Nombre: %s\n", pw->pw_gecos);
+	printf("Login: %s\n", pw->pw_name);
+	printf("Password: %s\n", pw->pw_passwd);
+	printf("UID: %d\n", pw->pw_uid);
+	printf("Home: %s\n", pw->pw_dir);
+	printf("Número de grupo principal: %d\n", pw->pw_gid);
+   if((gr=getgrgid( pw->pw_gid))==NULL)        {
+            fprintf(stderr, "Get of group information failed.\n");
+            exit(1);
+        }
+          	printf("ID del grupo:%d Nombre del grupo: %s\n",gr->gr_gid, gr->gr_name);
+}
 
 void usuarioNombre(char* nombre){
     struct passwd *pw;
@@ -81,18 +132,30 @@ void usuarioNombre(char* nombre){
             exit(1);
         }
         printf("Nombre: %s\n", pw->pw_gecos);
+	printf("Login: %s\n", pw->pw_name);
+	printf("Password: %s\n", pw->pw_passwd);
+	printf("UID: %d\n", pw->pw_uid);
+	printf("Home: %s\n", pw->pw_dir);
+	printf("Número de grupo principal: %d\n", pw->pw_gid);
+
 	
 }
 
 
-void usuarioId(char* nombre){
+void usuarioId(int id){
      struct passwd *pw;
-     if ((pw = getpwnam(nombre)) == NULL)
+     if ((pw = getpwuid(id)) == NULL)
         {
             fprintf(stderr, "Get of user information failed.\n");
             exit(1);
         }
-     printf("UID:%d\n ", pw->pw_uid);
+     printf("Nombre: %s\n", pw->pw_gecos);
+	printf("Login: %s\n", pw->pw_name);
+	printf("Password: %s\n", pw->pw_passwd);
+	printf("UID: %d\n", pw->pw_uid);
+	printf("Home: %s\n", pw->pw_dir);
+	printf("Número de grupo principal: %d\n", pw->pw_gid);
+
 }
   
 void help(){
